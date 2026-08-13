@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { dataContext } from "../context/UserContext";
 import { toast } from "react-toastify";
 
-function FoodForm({ editingFood, closeForm }) {
+function FoodForm({ editingFood, closeForm, onRequestSubmit }) {
 
     const {handleAddFood,handleUpdateFood} = useContext(dataContext);
 
@@ -12,22 +12,23 @@ function FoodForm({ editingFood, closeForm }) {
     const [foodType, setFoodType] = useState(editingFood?.foodType || "veg");
     const [foodCategory, setFoodCategory] =useState(editingFood?.foodCategory || "");
 
-    async function handleSubmit(e) {
+    function handleSubmit(e) {
         e.preventDefault();
         const foodData = {foodName,foodImage,price: Number(price),foodType,foodCategory};
-        try {
-            if (editingFood) {
-                await handleUpdateFood(editingFood.id,foodData);
-                toast.success( "Food updated successfully");
-            } else {
-                await handleAddFood(foodData);
-                toast.success("Food added successfully");
-            }
-            closeForm();
-        } catch (error) {
-           console.error(error);
-            toast.error("Something went wrong" );
-        }
+        onRequestSubmit(foodData);
+        // try {
+        //     if (editingFood) {
+        //         await handleUpdateFood(editingFood.id,foodData);
+        //         toast.success( "Food updated successfully");
+        //     } else {
+        //         await handleAddFood(foodData);
+        //         toast.success("Food added successfully");
+        //     }
+        //     closeForm();
+        // } catch (error) {
+        //    console.error(error);
+        //     toast.error("Something went wrong" );
+        // }
     }
     return (
         <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow mb-8">
