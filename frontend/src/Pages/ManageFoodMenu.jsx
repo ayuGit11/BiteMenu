@@ -30,6 +30,7 @@ function ManageFoodMenu() {
                 );
                 toast.success("Food updated successfully");
             }
+        setShowForm(false);
         setShowConfirm(false);
             setConfirmAction(null);
             setPendingFood(null);

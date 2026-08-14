@@ -16,19 +16,6 @@ function FoodForm({ editingFood, closeForm, onRequestSubmit }) {
         e.preventDefault();
         const foodData = {foodName,foodImage,price: Number(price),foodType,foodCategory};
         onRequestSubmit(foodData);
-        // try {
-        //     if (editingFood) {
-        //         await handleUpdateFood(editingFood.id,foodData);
-        //         toast.success( "Food updated successfully");
-        //     } else {
-        //         await handleAddFood(foodData);
-        //         toast.success("Food added successfully");
-        //     }
-        //     closeForm();
-        // } catch (error) {
-        //    console.error(error);
-        //     toast.error("Something went wrong" );
-        // }
     }
     return (
         <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow mb-8">

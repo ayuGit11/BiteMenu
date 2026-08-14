@@ -27,15 +27,17 @@ return (
           <FaSearch className='w-5 h-5'/>
           <input type='text' placeholder='search your food....' className='w-full outline-none text-2xl md:w-[70%]' onChange={(e)=>setInput(e.target.value)} value={input}/>
        </form>
-       <Link to="/menu" className="flex flex-col items-center gap-2 cursor-pointer"> 
-          <div className="w-15 h-15 bg-white flex justify-center items-center rounded-md shadow-xl hover:bg-teal-200 transition">
-            <MdRestaurantMenu className="w-8 h-8 text-amber-900" />
+       <div className="flex items-center gap-3">
+          <Link to="/menu" className="flex flex-col items-center gap-2 cursor-pointer"> 
+              <div className="w-15 h-15 bg-white flex justify-center items-center rounded-md shadow-xl transition">
+                <MdRestaurantMenu className="w-8 h-8 text-black-900" />
+              </div>
+          </Link>
+          <div className='w-15 h-15 bg-white flex justify-center items-center rounded-md shadow-xl relative cursor-pointer' onClick={()=>setShowCart(true)}>
+            <span className='absolute top-0 right-1 font-bold'>{items.length}</span>
+            <FaCartShopping className='w-8 h-8'/>
           </div>
-        </Link>
-       <div className='w-15 h-15 bg-white flex justify-center items-center rounded-md shadow-xl relative cursor-pointer' onClick={()=>setShowCart(true)}>
-         <span className='absolute top-0 right-1 font-bold'>{items.length}</span>
-         <FaCartShopping className='w-8 h-8'/>
-        </div>
+      </div>
     </div>
   )
 }
