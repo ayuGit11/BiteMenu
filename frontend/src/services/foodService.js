@@ -11,12 +11,20 @@ export async function getAllFoods() {
 
 // ADD food
 export async function addFood(food) {
+    const formData = new FormData();
+
+    formData.append("foodName", food.foodName);
+    formData.append("price", food.price);
+    formData.append("foodType", food.foodType);
+    formData.append("foodCategory", food.foodCategory);
+    formData.append("foodImage", food.foodImage);
+
+    if (food.selectedImage) {
+        formData.append("image", food.selectedImage);
+    }
     const response = await fetch(API_URL, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(food)
+        body: formData
     });
     if (!response.ok) {
         throw new Error("Failed to add food");
@@ -27,14 +35,24 @@ export async function addFood(food) {
 
 // UPDATE food
 export async function updateFood(id, food) {
+    const formData = new FormData();
+
+    formData.append("foodName", food.foodName);
+    formData.append("price", food.price);
+    formData.append("foodType", food.foodType);
+    formData.append("foodCategory", food.foodCategory);
+
+    if (food.selectedImage) {
+        formData.append("image", food.selectedImage);
+    }
     const response = await fetch(`${API_URL}/${id}`, {
         method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(food)
+        body: formData
+
     });
     if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Backend error:", errorText);
         throw new Error("Failed to update food");
     }
     return await response.json();

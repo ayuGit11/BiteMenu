@@ -55,8 +55,8 @@ public class Food {
     public String getFoodImage() {
         return foodImage;
     }
-    public void setFoodImage(String foodImage) {
-        this.foodImage = foodImage;
+    public void setFoodImage(String fileName) {
+        this.foodImage = fileName;
     }
     public Integer getPrice() {
         return price;

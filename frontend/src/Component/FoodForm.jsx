@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { dataContext } from "../context/UserContext";
 import { toast } from "react-toastify";
+import { IoAttach } from "react-icons/io5";
 
 function FoodForm({ editingFood, closeForm, onRequestSubmit }) {
 
@@ -12,9 +13,16 @@ function FoodForm({ editingFood, closeForm, onRequestSubmit }) {
     const [foodType, setFoodType] = useState(editingFood?.foodType || "veg");
     const [foodCategory, setFoodCategory] =useState(editingFood?.foodCategory || "");
 
+    const [selectedImage, setSelectedImage] = useState(null);
+
     function handleSubmit(e) {
         e.preventDefault();
-        const foodData = {foodName,foodImage,price: Number(price),foodType,foodCategory};
+        const foodData = {foodName: foodName,
+        foodImage: foodImage,
+        price: Number(price),
+        foodType: foodType,
+        foodCategory: foodCategory,
+        selectedImage: selectedImage};
         onRequestSubmit(foodData);
     }
     return (
@@ -29,7 +37,17 @@ function FoodForm({ editingFood, closeForm, onRequestSubmit }) {
             <label className="block font-semibold mb-1">Food Name</label>
             <input className="border border-gray-300 rounded-lg p-3 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-red-300" placeholder="Food Name" value={foodName} onChange={(e) => setFoodName(e.target.value)} required/>
             <label className="block font-semibold mb-1">Image URL</label>
-            <input className="border border-gray-300 rounded-lg p-3 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-red-300" placeholder="Image URL" value={foodImage} onChange={(e) => setFoodImage(e.target.value)} required/>
+            <div className="relative w-full mb-4">
+                <input className="border border-gray-300 rounded-lg p-3 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-red-300" 
+                    placeholder="Image URL" value={selectedImage ? selectedImage.name : foodImage} 
+                    onChange={(e) => setFoodImage(e.target.value)} required={!selectedImage}/>
+                <label htmlFor="imageFile"
+                    className="absolute right-2 top-3 cursor-pointer text-gray-500 hover:text-blue-500"
+                        title="Attach Image">
+                    <IoAttach className="text-2xl" />
+                </label>
+                <input id="imageFile" type="file" accept="image/*" className="hidden" onChange={(e) => {const file = e.target.files[0];if (file) {setSelectedImage(file);setFoodImage(file.name);}}}/>
+            </div>
             <label className="block font-semibold mb-1">Price</label>
             <input className="border border-gray-300 rounded-lg p-3 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-red-300" type="number" placeholder="Price" value={price} onChange={(e) =>setPrice(e.target.value)} required/>
             <label className="block font-semibold mb-1">Category</label>
