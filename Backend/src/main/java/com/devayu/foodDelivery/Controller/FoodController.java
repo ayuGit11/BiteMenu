@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.antlr.v4.runtime.misc.IntegerList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.devayu.foodDelivery.Model.Food;
 import com.devayu.foodDelivery.Service.FoodService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/foods")
@@ -33,6 +36,11 @@ public class FoodController {
     @GetMapping("/{id}")
     public Food getFoodById(@PathVariable Integer id) {
         return service.getFoodById(id);
+    }
+
+    @GetMapping("/csrf-token")
+    public CsrfToken getCsrfToken(HttpServletRequest request) {
+        return (CsrfToken) request.getAttribute(CsrfToken.class.getName());
     }
 
     @PostMapping
