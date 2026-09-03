@@ -7,14 +7,17 @@ import UserContext from './context/UserContext.jsx'
 import {Provider} from 'react-redux'
 import { store } from './redux/store.js'
 import { ToastContainer} from 'react-toastify';
+import AuthProvider from './context/AuthContext.jsx'
 
 createRoot(document.getElementById('root')).render(
    <BrowserRouter>
       <Provider store={store}>
-        <UserContext>
-          <App />
-          <ToastContainer />
-        </UserContext>
+        <AuthProvider>
+          <UserContext>
+            <App />
+            <ToastContainer />
+          </UserContext>
+        </AuthProvider>
       </Provider>
     </BrowserRouter>
 )

@@ -23,7 +23,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/foods")
-@CrossOrigin(origins = "http://localhost:5173") // React Vite
+// @CrossOrigin(origins = "http://localhost:5173") // React Vite
 public class FoodController {
     @Autowired
     private FoodService service;

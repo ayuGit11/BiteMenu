@@ -9,9 +9,11 @@ import { dataContext } from '../context/UserContext';
 import { useEffect } from 'react';
 //import { food_items } from '../food';
 import { useSelector } from 'react-redux';
+import { useAuth } from "../context/AuthContext";
 
 function Nav() {
-  let {input,setInput,food,categories,setCategory,showCart,setShowCart}=useContext(dataContext)
+  let {input,setInput,food,categories,setCategory,showCart,setShowCart}=useContext(dataContext);
+  let { user, logout } = useAuth();
   useEffect(()=>{
     let newList=food.filter((item)=>item.foodName?.toLowerCase().includes(input.toLowerCase()))
     setCategory(newList)
@@ -20,9 +22,11 @@ function Nav() {
 let items = useSelector(state=>state.cart)
 return (
     <div className='w-full h-25 bg-red-300 flex justify-between items-center px-5 mb-5 md:px-8'>
+      <Link to="/">
         <div className='w-15 h-15 bg-white flex justify-center items-center rounded-md shadow-xl'>
          <MdFastfood className='w-8 h-8 text-amber-900' />
         </div>
+      </Link>
        <form className='w-[60%] h-15 px-5 gap-5 bg-white flex items-center rounded-md shadow-xl' onSubmit={(e)=>e.preventDefault()} >
           <FaSearch className='w-5 h-5'/>
           <input type='text' placeholder='search your food....' className='w-full outline-none text-2xl md:w-[70%]' onChange={(e)=>setInput(e.target.value)} value={input}/>
@@ -37,6 +41,17 @@ return (
             <span className='absolute top-0 right-1 font-bold'>{items.length}</span>
             <FaCartShopping className='w-8 h-8'/>
           </div>
+          {user ? (
+            <>
+              <span className="font-bold">Hi, {user.username}</span>
+              <button onClick={logout} className="bg-white px-4 py-2 rounded-md font-semibold hover:bg-gray-100">Logout</button>
+            </>
+            ) : (
+            <>
+              <Link to="/login" className="bg-white px-4 py-2 rounded-md font-semibold hover:bg-gray-100">Login </Link>
+              <Link to="/register" className="bg-white px-4 py-2 rounded-md font-semibold hover:bg-gray-100">Register</Link>
+            </>
+            )}
       </div>
     </div>
   )

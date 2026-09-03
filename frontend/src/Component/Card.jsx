@@ -3,9 +3,31 @@ import { IoIosRadioButtonOn } from "react-icons/io";
 import { useDispatch } from 'react-redux';
 import { AddItem } from '../redux/cartSlice';
 import { toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function Card({foodName,foodImage,id,price,foodType}) {
-  let dispatch = useDispatch()
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  let dispatch = useDispatch();
+
+  const handleAddToCart = () => {
+    if (!user) {
+        navigate("/login");
+        return;
+    }
+    dispatch(
+        AddItem({
+            id: id,
+            foodName: foodName,
+            price: price,
+            foodImage: foodImage,
+            foodQuantity: 1
+        })
+    );
+
+    toast.success(`${foodName} Added`);
+  };
   return (
     <div className='w-70 h-95 bg-white p-5 m-7 rounded-md shadow-xl flex flex-col gap-3 hover:border-2 border-pink-600'>
         <div className='w-full h-[60%] overflow-hidden rounded-md'>
@@ -21,10 +43,7 @@ function Card({foodName,foodImage,id,price,foodType}) {
                 <span>{foodType}</span>
             </div>
         </div>
-        <button className='w-full bg-red-300 rounded p-3 font-bold hover:bg-red-500 cursor-pointer'onClick={
-          ()=>{dispatch(AddItem({id:id, foodName:foodName,price:price,foodImage:foodImage,foodQuantity:1}));
-         toast.success(()=>`${foodName} Added`)
-        }}>
+        <button className='w-full bg-red-300 rounded p-3 font-bold hover:bg-red-500 cursor-pointer'onClick={handleAddToCart}>
           Add to Cart
         </button>
     </div>
