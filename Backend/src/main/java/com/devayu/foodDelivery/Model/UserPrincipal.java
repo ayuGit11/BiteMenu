@@ -13,10 +13,12 @@ public class UserPrincipal implements UserDetails {
 
     public UserPrincipal(User user) {
         this.user = user;
+        System.out.println("UserPrincipal created for user: " + user.getUsername() + " with role: " + user.getRole());
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")); // Implement if you have roles/authorities
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE_"+user.getRole())); // Implement if you have roles/authorities
     }
 
     @Override

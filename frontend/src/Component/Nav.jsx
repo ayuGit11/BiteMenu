@@ -18,8 +18,6 @@ function Nav() {
     setCategory(newList)
   },[input,food])
 
-  console.log("Role:", user?.role);
-
 let items = useSelector(state=>state.cart)
 return (
     <div className='w-full bg-red-300 px-6 py-4 mb-5 shadow-md'>

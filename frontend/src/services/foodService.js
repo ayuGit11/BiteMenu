@@ -36,6 +36,7 @@ export async function addFood(food) {
     const response = await fetch(API_URL, {
         method: "POST",
         headers: { ...getAuthHeaders(), },
+        credentials: "include",
         body: formData
     });
     if (!response.ok) {
@@ -60,6 +61,7 @@ export async function updateFood(id, food) {
     const response = await fetch(`${API_URL}/${id}`, {
         method: "PUT",
         headers: { ...getAuthHeaders(), },
+        credentials: "include",
         body: formData
 
     });
@@ -77,6 +79,7 @@ export async function deleteFood(id) {
     const response = await fetch(`${API_URL}/${id}`, {
         method: "DELETE",
         headers: { ...getAuthHeaders(), },
+        credentials: "include",
     });
     if (!response.ok) {
         throw new Error("Failed to delete food");
