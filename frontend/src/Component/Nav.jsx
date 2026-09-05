@@ -18,6 +18,8 @@ function Nav() {
     setCategory(newList)
   },[input,food])
 
+  console.log("Role:", user?.role);
+
 let items = useSelector(state=>state.cart)
 return (
     <div className='w-full bg-red-300 px-6 py-4 mb-5 shadow-md'>
@@ -31,13 +33,13 @@ return (
           <FaSearch className='text-gray-500'/>
           <input type='text' placeholder='search your food....' className='w-full outline-none text-lg' onChange={(e)=>setInput(e.target.value)} value={input}/>
        </form>
-
        <div className="flex items-center gap-6">
+        {user?.role === "ADMIN" && (
           <Link to="/menu" className="flex items-center gap-2 font-semibold hover:text-amber-900"> 
             <MdRestaurantMenu className="text-2xl" />
             <span>Menu</span>
           </Link>
-
+         )}
           <button onClick={() => setShowCart(true)} className='relative flex items-center gap-2 font-semibold hover:text-amber-900'>
             <FaCartShopping className='text-2xl' />
             <span>Cart</span>

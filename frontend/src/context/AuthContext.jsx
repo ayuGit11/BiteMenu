@@ -9,26 +9,47 @@ export default function AuthProvider({ children }) {
     const [user, setUser] = useState(() => {
         const username = sessionStorage.getItem("username");
         const auth = sessionStorage.getItem("auth");
+        const role = sessionStorage.getItem("role");
 
         if (username && auth) {
             return {
                 username,
                 auth,
+                role
             };
         }
 
         return null;
     });
 
-    const login = (username, password) => {
+    const login = async (username, password) => {
         const credentials = btoa(`${username}:${password}`);
+        
+        const response = await fetch("http://localhost:8080/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify({
+                username,
+                password
+            })
+        });
+        if (!response.ok) {
+            throw new Error("Login failed");
+        }
+
+        const data = await response.json();
 
         sessionStorage.setItem("username", username);
         sessionStorage.setItem("auth", credentials);
+        sessionStorage.setItem("role", data.role);
 
         setUser({
             username,
             auth: credentials,
+            role: data.role
         });
     };
 
@@ -37,6 +58,7 @@ export default function AuthProvider({ children }) {
         dispatch(ClearCart());
         sessionStorage.removeItem("username");
         sessionStorage.removeItem("auth");
+        sessionStorage.removeItem("role");
 
         setUser(null);
     };

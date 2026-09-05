@@ -1,6 +1,8 @@
 package com.devayu.foodDelivery.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,8 +58,18 @@ public class UserService {
 
             // Store SecurityContext in session
             session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,context);
+            Optional<User> userOptional = userRepo.findByUsername(username);
 
-            return ResponseEntity.ok( "Login successful");
+            if (userOptional.isEmpty()) {
+               return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            }
+        
+            User user = userOptional.get();
+            
+            return ResponseEntity.ok(Map.of(
+                "username", user.getUsername(),
+                "role", user.getRole()
+            ));
 
         } catch (BadCredentialsException e) {
 

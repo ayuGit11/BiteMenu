@@ -1,5 +1,7 @@
 package com.devayu.foodDelivery.Service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,10 +20,10 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepo.findByUsername(username);
-        if(user == null) {
+        Optional<User> userOptional = userRepo.findByUsername(username);
+        if(userOptional.isEmpty()) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
-        return new UserPrincipal(user);
+        return new UserPrincipal(userOptional.get());
     }
 }
