@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { ClearCart } from "../redux/cartSlice";
+import { setCart, ClearCart } from "../redux/cartSlice";
+import { getCart } from "../services/cartService";
 
 export const AuthContext = createContext();
 
@@ -21,7 +22,20 @@ export default function AuthProvider({ children }) {
 
         return null;
     });
-
+    // Load cart whenever an already logged-in user is available
+     useEffect(() => {
+        if(user){
+            const loadCart = async () => {
+                try {
+                    const cart = await getCart();
+                    dispatch(setCart(cart));
+                } catch (error) {
+                    console.error("Failed to load cart:", error);
+                    dispatch(setCart([]));
+                }
+            };
+            loadCart();
+        }}, [user, dispatch]);
     const login = async (username, password) => {
         const credentials = btoa(`${username}:${password}`);
         
@@ -51,6 +65,7 @@ export default function AuthProvider({ children }) {
             auth: credentials,
             role: data.role
         });
+       
     };
 
     const logout = () => {

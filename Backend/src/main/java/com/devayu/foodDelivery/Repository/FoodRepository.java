@@ -7,5 +7,5 @@ import com.devayu.foodDelivery.Model.Food;
 
 @Repository
 public interface FoodRepository extends JpaRepository<Food,Integer> {
-    
+    Food findById(int id);
 }

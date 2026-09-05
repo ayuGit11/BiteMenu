@@ -1,14 +1,15 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { dataContext } from "../context/UserContext";
 import { toast } from "react-toastify";
 import FoodForm from "../Component/FoodForm";
 import ConfirmModal from "../Component/ConfirmModal";
 
-import {MdFastfood,MdDashboard,MdRestaurantMenu,MdSearch,MdEdit,MdDelete,MdLogout} from "react-icons/md";
+import {MdFastfood,MdDashboard,MdRestaurantMenu,MdSearch,MdEdit,MdDelete,MdKeyboardArrowUp} from "react-icons/md";
 
 function ManageFoodMenu() {
 
+    const navigate = useNavigate();
     const {food,handleDeleteFood,handleAddFood,handleUpdateFood} = useContext(dataContext);
 
     const [showForm, setShowForm] = useState(false);
@@ -71,22 +72,29 @@ function ManageFoodMenu() {
     const vegCount = food.filter(item => item.foodType?.toLowerCase() === "veg").length;
     const nonVegCount = food.filter(item => item.foodType?.toLowerCase() === "non-veg").length;
 
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    };
+
     return (
         <div className="min-h-screen bg-gray-100 flex">
             {/* SIDEBAR */}
             <aside className="hidden md:flex w-64 bg-gray-900 text-white flex-col">
                 <div className="p-6 border-b border-gray-700">
-                    <Link to="/" className="flex items-center gap-2">
+                    <div className="flex items-center gap-2">
                         <MdFastfood className="text-4xl text-orange-400" />
                         <span className="text-2xl font-bold">BiteMenu</span>
-                    </Link>
+                    </div>
                     <p className="text-gray-400 text-sm mt-1">
                         Admin Panel
                     </p>
                 </div>
 
                 <nav className="flex-1 p-4 space-y-2">
-                    <Link to="/"className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800">
+                    <Link to="/" className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800">
                         <MdDashboard />
                         Dashboard
                     </Link>
@@ -97,10 +105,10 @@ function ManageFoodMenu() {
                 </nav>
 
                 <div className="p-4 border-t border-gray-700">
-                    <Link to="/" className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white">
-                        <MdLogout />
-                        Back to Store
-                    </Link>
+                    <button onClick={scrollToTop} className="w-full flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white">
+                      <MdKeyboardArrowUp className="text-xl" />
+                      Back to Top
+                    </button>
                 </div>
             </aside>
 

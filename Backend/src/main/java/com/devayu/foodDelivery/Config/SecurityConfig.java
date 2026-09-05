@@ -70,6 +70,7 @@ public class SecurityConfig {
 
             // Logged-in users
             .requestMatchers("/orders/**").authenticated()
+            .requestMatchers("/cart/**").authenticated()
 
             // Everything else
             .anyRequest().authenticated()

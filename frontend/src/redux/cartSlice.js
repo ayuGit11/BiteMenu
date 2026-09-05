@@ -4,12 +4,15 @@ const cartSlice=createSlice({
     name:"cart",
     initialState:[],
     reducers:{
+        setCart: (state, action) => {
+            return action.payload;
+        },
         AddItem:(state,action)=>{
-            let existItem = state.find((item)=>item.id===action.payload.id)
-            if (existItem){
-                return state.map((item)=>(item.id===action.payload.id?{...item,foodQuantity:item.foodQuantity+1}:item))}
-            else{
-                state.push(action.payload)
+            const existItem = state.find(item => item.id === action.payload.id);
+            if (existItem) {
+               existItem.foodQuantity =action.payload.foodQuantity;
+            }else{
+              state.push(action.payload);
             }
         },
         RemoveItem:(state,action)=>{
@@ -27,5 +30,5 @@ const cartSlice=createSlice({
     }
 })
 
-export const {AddItem,RemoveItem,IncrementQty,DecrementQty,ClearCart} = cartSlice.actions
+export const {setCart,AddItem,RemoveItem,IncrementQty,DecrementQty,ClearCart} = cartSlice.actions
 export default cartSlice.reducer

@@ -18,22 +18,7 @@ function Login() {
     setLoginSuccess(false);
 
     try {
-      const response = await fetch("http://localhost:8080/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          username,
-          password,
-        }),
-      });
-
-      const data = await response.text();
-
-      if (response.ok) {
-        login(username, password);
+      await login(username, password);
         setMessage("Login successful!");
         setLoginSuccess(true);
         setTimeout(() => {
@@ -42,13 +27,10 @@ function Login() {
           const from = location.state?.from || "/";
           navigate(from);
         }, 500);
-      } else {
-        setMessage(data || "Invalid username or password");
-      }
-    } catch (error) {
-      console.error("Login error:", error);
-      setMessage("Unable to connect to server");
-      setLoginSuccess(false);
+    }catch(error){
+        console.error("Login error:", error);
+        setMessage(error.message || "Invalid username or password");
+        setLoginSuccess(false);
     }
   };
 
