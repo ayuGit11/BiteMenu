@@ -13,7 +13,6 @@ function UserContext({children}) {
        async function fetchFoods() {
         try {
                 const data = await getAllFoods();
-                console.log("Food received from backend:", data);
                 setFood(data);
                 setCategory(data);
             } catch (error) {

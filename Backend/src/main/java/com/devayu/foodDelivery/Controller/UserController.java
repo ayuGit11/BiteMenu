@@ -33,10 +33,16 @@ public class UserController {
     public List<User> getUsers() {
         return service.getAllUsers();
     }
+
     @PostMapping("/register")
-    public User register(@RequestBody User user) {
-        // Implement user registration logic here
-        return service.saveUser(user);
+    public ResponseEntity<?> register(@RequestBody User user) {
+      try {
+        User savedUser = service.saveUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
     }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request,HttpSession session) {

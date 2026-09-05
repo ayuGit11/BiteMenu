@@ -6,6 +6,7 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [loginSuccess, setLoginSuccess] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -14,6 +15,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
+    setLoginSuccess(false);
 
     try {
       const response = await fetch("http://localhost:8080/login", {
@@ -33,6 +35,7 @@ function Login() {
       if (response.ok) {
         login(username, password);
         setMessage("Login successful!");
+        setLoginSuccess(true);
         setTimeout(() => {
           // If user came from checkout/place order,
           // send them back there.
@@ -45,6 +48,7 @@ function Login() {
     } catch (error) {
       console.error("Login error:", error);
       setMessage("Unable to connect to server");
+      setLoginSuccess(false);
     }
   };
 
@@ -52,10 +56,10 @@ function Login() {
     <div className="min-h-screen flex items-center  bg-pink-200 justify-center">
       <form
         onSubmit={handleSubmit}
-        className="w-96 p-6 shadow-lg rounded-lg bg-white"
+        className="w-96 p-8 shadow-xl rounded-lg bg-white"
       >
-        <h2 className="text-2xl font-bold mb-5 text-center">
-          Login
+        <h2 className="text-3xl font-bold mb-2 text-center">
+          Sign In
         </h2>
         <p className="text-gray-500 text-center mb-6">
           Sign in to continue to BiteMenu
@@ -65,8 +69,12 @@ function Login() {
           type="text"
           placeholder="Username"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="w-full border p-3 mb-4 rounded-md outline-none focus:ring-2 focus:ring-orange-400"
+          onChange={(e) => {setUsername(e.target.value);setMessage("");}}
+          className={`w-full border p-3 mb-4 rounded-md outline-none focus:ring-2 focus:ring-orange-400} ${
+            message && !loginSuccess
+              ? "border-red-500"
+              : "border-gray-300"
+          }`}
           required
         />
 
@@ -74,8 +82,12 @@ function Login() {
           type="password"
           placeholder="Password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full border p-3 mb-4 rounded-md outline-none focus:ring-2 focus:ring-orange-400"
+          onChange={(e) => {  setPassword(e.target.value);setMessage("");}}
+          className={`w-full border p-3 mb-4 rounded-md outline-none focus:ring-2 focus:ring-orange-400} ${
+            message && !loginSuccess
+              ? "border-red-500"
+              : "border-gray-300"
+          }`}
           required
         />
 
@@ -87,10 +99,11 @@ function Login() {
         </button>
 
         {message && (
-          <p className="text-center mt-4 text-sm">
+          <p className={`text-center mt-4 text-sm ${loginSuccess ? "text-green-500" : "text-red-500"}`}>
             {message}
           </p>
         )}
+        
         <div className="text-center mt-6 text-gray-600">
           Don't have an account?{" "}
           <Link to="/register" className="text-orange-500 font-semibold hover:underline">

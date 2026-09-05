@@ -22,10 +22,10 @@ let items = useSelector(state=>state.cart)
 return (
     <div className='w-full bg-red-300 px-6 py-4 mb-5 shadow-md'>
       <div className='flex items-center justify-between gap-6'>
-        <Link to="/"className='flex items-center gap-2 shrink-0'>
+        <div className='flex items-center gap-2 shrink-0'>
           <MdFastfood className='text-4xl text-amber-900' />
           <span className='text-2xl font-bold text-amber-900'>BiteMenu</span>
-        </Link>
+        </div>
 
        <form className='flex-1 max-w-2xl h-12 px-5 gap-3 bg-white items-center rounded-full shadow-md hidden md:flex' onSubmit={(e)=>e.preventDefault()} >
           <FaSearch className='text-gray-500'/>

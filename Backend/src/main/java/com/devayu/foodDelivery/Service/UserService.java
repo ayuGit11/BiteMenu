@@ -33,7 +33,9 @@ public class UserService {
     private AuthenticationManager authenticationManager;
 
     public User saveUser(User user) {
-
+        if (userRepo.existsByUsername(user.getUsername())) {
+           throw new RuntimeException("Username already exists");
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole("USER");
         return userRepo.save(user);
