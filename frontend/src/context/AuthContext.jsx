@@ -1,8 +1,11 @@
 import React, { createContext, useContext, useState } from "react";
+import { useDispatch } from "react-redux";
+import { ClearCart } from "../redux/cartSlice";
 
 export const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
+    const dispatch = useDispatch();
     const [user, setUser] = useState(() => {
         const username = sessionStorage.getItem("username");
         const auth = sessionStorage.getItem("auth");
@@ -30,6 +33,8 @@ export default function AuthProvider({ children }) {
     };
 
     const logout = () => {
+        // Clear cart when user logs out
+        dispatch(ClearCart());
         sessionStorage.removeItem("username");
         sessionStorage.removeItem("auth");
 

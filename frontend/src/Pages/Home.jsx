@@ -9,9 +9,23 @@ import { ImCross } from "react-icons/im";
 import Card2 from '../Component/Card2'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function Home() {
   let {categories,setCategory,food,input,showCart,setShowCart}=useContext(dataContext)
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  function handlePlaceOrder() {
+    if (!user) {
+      navigate("/login", {
+        state: { from: "/" }
+      });
+      return;
+    }
+    toast.success("Order Placed...");
+  }
   function filter(category){
     
     if(category==="All"){
@@ -25,7 +39,7 @@ function Home() {
     }
   }
   let items=useSelector(state=>state.cart)
-  let subTotal = items.reduce((total,item)=>total+item.qty*item.price,0)
+  let subTotal = items.reduce((total,item)=>total+item.foodQuantity*item.price,0)
   let delivery=20
   let taxes=subTotal*0.5/100
   let total = subTotal+delivery+taxes
@@ -80,7 +94,7 @@ function Home() {
                     <span className='text-pink-500 font-semibold text-lg'>Rs. {total}/-</span>
                 
               </div>
-              <button className='w-full bg-red-300 rounded p-3 font-bold hover:bg-red-500 cursor-pointer'onClick={()=>toast.success("Order Placed...")}>Place Order</button>
+              <button className='w-full bg-red-300 rounded p-3 font-bold hover:bg-red-500 cursor-pointer'onClick={handlePlaceOrder}>Place Order</button>
             </>:
             <div className='font-semibold text-2xl text-red-500 text-center pt-5'>Empty Cart 🛒</div>
           }

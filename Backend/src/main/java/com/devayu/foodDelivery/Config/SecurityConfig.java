@@ -58,6 +58,7 @@ public class SecurityConfig {
             // Public endpoints
             .requestMatchers(HttpMethod.GET, "/foods/**").permitAll()
             .requestMatchers("/register").permitAll()
+            .requestMatchers("/images/**").permitAll()
             .requestMatchers("/login").permitAll()
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 

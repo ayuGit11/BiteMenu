@@ -3,19 +3,12 @@ import { IoIosRadioButtonOn } from "react-icons/io";
 import { useDispatch } from 'react-redux';
 import { AddItem } from '../redux/cartSlice';
 import { toast } from 'react-toastify';
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+
 
 function Card({foodName,foodImage,id,price,foodType}) {
-  const { user } = useAuth();
-  const navigate = useNavigate();
   let dispatch = useDispatch();
 
   const handleAddToCart = () => {
-    if (!user) {
-        navigate("/login");
-        return;
-    }
     dispatch(
         AddItem({
             id: id,
