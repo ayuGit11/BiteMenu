@@ -49,9 +49,9 @@ function FoodForm({ editingFood, closeForm, onRequestSubmit }) {
                 <input id="imageFile" type="file" accept="image/*" className="hidden" onChange={(e) => {const file = e.target.files[0];if (file) {setSelectedImage(file);setFoodImage(file.name);}}}/>
             </div>
             <label className="block font-semibold mb-1">Price</label>
-            <input className="border border-gray-300 rounded-lg p-3 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-red-300" type="number" placeholder="Price" value={price} onChange={(e) =>setPrice(e.target.value)} required/>
+            <input className="border border-gray-300 rounded-lg p-3 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-red-300" type="number" step="0.01" min="0" placeholder="Price" value={price} onChange={(e) =>setPrice(e.target.value)} required/>
             <label className="block font-semibold mb-1">Category</label>
-            <select className={`border border-gray-300 rounded-lg p-3 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-red-300 ${foodCategory === "" ? "text-gray-400" : "text-gray-900"}`} 
+            <select className={`border border-gray-300 rounded-lg p-3 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-red-300 `} 
              value={foodCategory} onChange={(e) => setFoodCategory(e.target.value)} required >
                 <option value="" disabled> Select Category </option>
                 <option value="breakfast"> Breakfast </option>

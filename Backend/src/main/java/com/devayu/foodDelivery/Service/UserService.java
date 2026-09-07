@@ -14,13 +14,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 
 import com.devayu.foodDelivery.Model.User;
 import com.devayu.foodDelivery.Repository.UserRepo;
 
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import org.springframework.security.web.context.SecurityContextRepository;
 
 @Service
 public class UserService {
@@ -33,6 +35,9 @@ public class UserService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private SecurityContextRepository securityContextRepository; 
 
     public User saveUser(User user) {
         if (userRepo.existsByUsername(user.getUsername())) {
@@ -47,7 +52,7 @@ public class UserService {
         return userRepo.findAll();
     }
 
-    public ResponseEntity<?> loginUser(String username,String password,HttpSession session) {
+    public ResponseEntity<?> loginUser(String username,String password, HttpServletRequest request, HttpServletResponse response) {
         try {
             Authentication authentication = authenticationManager.authenticate( new UsernamePasswordAuthenticationToken(username,password));
 
@@ -57,7 +62,7 @@ public class UserService {
             SecurityContextHolder.setContext(context);
 
             // Store SecurityContext in session
-            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,context);
+            securityContextRepository.saveContext(context,request,response);
             Optional<User> userOptional = userRepo.findByUsername(username);
 
             if (userOptional.isEmpty()) {

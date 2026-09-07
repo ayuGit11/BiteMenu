@@ -40,7 +40,7 @@ export default function Card({ foodName, foodImage, id, price, foodType }) {
             </div>
             <div className='text-2xl font-semibold'>{foodName}</div>
             <div className='w-full flex justify-between items-center'>
-                <div className='font-bold text-blue-500'>Rs. {price}</div>
+                <div className='font-bold text-blue-500'>Rs. {Number(price).toFixed(2)}</div>
                 <div className={`flex font-semibold gap-1 ${foodType === "veg"? "text-green-500": "text-red-500"}`}>
                     <IoIosRadioButtonOn />
                     <span>{foodType}</span>

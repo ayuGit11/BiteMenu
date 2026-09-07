@@ -15,7 +15,7 @@ createRoot(document.getElementById('root')).render(
         <AuthProvider>
           <UserContext>
             <App />
-            <ToastContainer />
+            <ToastContainer  position="top-center" autoClose={1500}/>
           </UserContext>
         </AuthProvider>
       </Provider>

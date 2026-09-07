@@ -78,20 +78,20 @@ function Home() {
              <div className='w-full border-t-2border-b-2 mt-6 border-gray-300 flex flex-col p-3 gap-2'>
                 <div className='w-full flex justify-between items-center'>
                     <span className='text-md text-gray-500 font-semibold'>Subtotal</span>
-                    <span className='text-pink-500 font-semibold text-md'>Rs. {subTotal}/-</span>
+                    <span className='text-pink-500 font-semibold text-md'>Rs.  {Number(subTotal).toFixed(2)}/-</span>
                 </div>
                 <div className='w-full flex justify-between items-center '>
                     <span className='text-md text-gray-500 font-semibold'>Delivery Fee</span>
-                    <span className='text-pink-500 font-semibold text-md'>Rs. {delivery}/-</span>
+                    <span className='text-pink-500 font-semibold text-md'>Rs. {Number(delivery).toFixed(2)}/-</span>
                 </div>
                 <div className='w-full flex justify-between items-center'>
                     <span className='text-md text-gray-500 font-semibold'>Taxes</span>
-                    <span className='text-pink-500 font-semibold text-md'>Rs. {taxes}/-</span>
+                    <span className='text-pink-500 font-semibold text-md'>Rs. {Number(taxes).toFixed(2)}/-</span>
                 </div>
               </div>
               <div className='w-full flex justify-between items-center p-3'>
                     <span className='text-lg text-gray-500 font-semibold'>Total</span>
-                    <span className='text-pink-500 font-semibold text-lg'>Rs. {total}/-</span>
+                    <span className='text-pink-500 font-semibold text-lg'>Rs. {Number(total).toFixed(2)}/-</span>
                 
               </div>
               <button className='w-full bg-red-300 rounded p-3 font-bold hover:bg-red-500 cursor-pointer'onClick={handlePlaceOrder}>Place Order</button>

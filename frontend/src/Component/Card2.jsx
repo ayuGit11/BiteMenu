@@ -59,7 +59,7 @@ export default function Card2({foodName,price,id,foodImage,foodQuantity}) {
             </div>
         </div>
         <div className='flex flex-col gap-6'>
-            <span className='text-xl font-semibold text-pink-400'>Rs. {price}/-</span>
+            <span className='text-xl font-semibold text-pink-400'>Rs. {Number(price).toFixed(2)}/-</span>
                     <RiDeleteBin6Fill className='text-red-500 text-2xl cursor-pointer' onClick={handleRemove}/>
         </div>
       

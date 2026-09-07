@@ -44,13 +44,13 @@ public class FoodController {
     }
 
     @PostMapping
-    public Food addFood(@RequestParam String foodName,@RequestParam Integer price,@RequestParam String foodType,
+    public Food addFood(@RequestParam String foodName,@RequestParam float price,@RequestParam String foodType,
         @RequestParam String foodCategory,@RequestParam(required = false) String foodImage, @RequestParam(required = false) MultipartFile image) {
         return service.addFood(foodName, price, foodType, foodCategory,foodImage, image);
     }
 
     @PutMapping("/{id}")
-    public Food updateFood( @PathVariable Integer id,@RequestParam String foodName,@RequestParam Integer price,@RequestParam String foodType,
+    public Food updateFood( @PathVariable Integer id,@RequestParam String foodName,@RequestParam float price,@RequestParam String foodType,
         @RequestParam String foodCategory,@RequestParam(required = false) String foodImage,@RequestParam(required = false) MultipartFile image) {
         return service.updateFood(id, foodName, price, foodType, foodCategory, foodImage, image);
     }

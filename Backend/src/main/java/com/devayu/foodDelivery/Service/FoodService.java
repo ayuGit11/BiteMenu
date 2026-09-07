@@ -60,7 +60,7 @@ public class FoodService {
     }
     
     //Add Food
-    public Food addFood(String foodName,Integer price, String foodType, String foodCategory,String foodImage, MultipartFile image) {
+    public Food addFood(String foodName,float price, String foodType, String foodCategory,String foodImage, MultipartFile image) {
          Food food = new Food();
 
         food.setFoodName(foodName);
@@ -79,7 +79,7 @@ public class FoodService {
     }
 
     // Update food
-    public Food updateFood( Integer id,String foodName,Integer price,String foodType,String foodCategory,String foodImage,MultipartFile image) {
+    public Food updateFood( Integer id,String foodName,float price,String foodType,String foodCategory,String foodImage,MultipartFile image) {
 
         Food existingFood = repo.findById(id).orElseThrow(() -> new RuntimeException("Food not found"));
 

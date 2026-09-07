@@ -19,7 +19,7 @@ public class Food {
     private String foodType;
     private Integer foodQuantity;
     private String foodImage;
-    private Integer price;
+    private float price;
 
     // getters and setters
     public Integer getId() {
@@ -58,10 +58,10 @@ public class Food {
     public void setFoodImage(String fileName) {
         this.foodImage = fileName;
     }
-    public Integer getPrice() {
+    public float getPrice() {
         return price;
     }
-    public void setPrice(Integer price) {
+    public void setPrice(float price) {
         this.price = price;
     }
     @Override
