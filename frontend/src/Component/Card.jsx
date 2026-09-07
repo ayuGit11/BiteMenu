@@ -5,15 +5,18 @@ import { AddItem } from '../redux/cartSlice';
 import { addToCart } from '../services/cartService';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function Card({ foodName, foodImage, id, price, foodType }) {
     const dispatch = useDispatch();
+    const navigate  =  useNavigate();
     const { user,logout } = useAuth();
     const handleAddToCart = async () => {
         try {
              // User is not logged in
             if (!user) {
                 toast.error("Please login to add items to cart");
+                navigate("/login");
                 return;
             }
             // Save/update cart in backend
@@ -32,12 +35,10 @@ export default function Card({ foodName, foodImage, id, price, foodType }) {
             toast.success(`${foodName} Added`);
         } catch (error) {
             console.error("Add to cart failed:", error);
-           if (error.status === 401) {
+           if (error.status === 401 || error.status === 403) {
                 logout();
                 toast.error("Your session has expired. Please login again.");
-            } else if (error.status === 403) {
-                logout();
-                toast.error("Your session is no longer valid. Please login again.");
+                navigate("/login");
             } else {
                 toast.error("Server is unavailable. Please try again.");
             }

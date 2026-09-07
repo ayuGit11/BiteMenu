@@ -4,12 +4,14 @@ import { dataContext } from "../context/UserContext";
 import { toast } from "react-toastify";
 import FoodForm from "../Component/FoodForm";
 import ConfirmModal from "../Component/ConfirmModal";
+import { useAuth } from "../context/AuthContext";
 
 import {MdFastfood,MdDashboard,MdRestaurantMenu,MdSearch,MdEdit,MdDelete,MdKeyboardArrowUp} from "react-icons/md";
 
 function ManageFoodMenu() {
 
     const navigate = useNavigate();
+    const { logout } = useAuth();
     const {food,handleDeleteFood,handleAddFood,handleUpdateFood} = useContext(dataContext);
 
     const [showForm, setShowForm] = useState(false);
@@ -50,8 +52,17 @@ function ManageFoodMenu() {
             setPendingFood(null);
 
         } catch (error) {
-            console.error(error);
-            toast.error("Something went wrong");
+            console.error("Menu operation failed:", error);
+
+            if (error.status === 401 || error.status === 403) {
+                logout();
+                toast.error("Your session has expired. Please login again.");
+                navigate("/login");
+                return;
+            } 
+            else {
+                toast.error("Server is unavailable. Changes were not saved.");
+            }
         }
     }
 

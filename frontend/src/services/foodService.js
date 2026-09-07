@@ -40,7 +40,9 @@ export async function addFood(food) {
         body: formData
     });
     if (!response.ok) {
-        throw new Error("Failed to add food");
+        const error = new Error("Failed to add food");
+        error.status = response.status;
+        throw error;
     }
     return await response.json();
 }
@@ -68,7 +70,10 @@ export async function updateFood(id, food) {
     if (!response.ok) {
         const errorText = await response.text();
         console.error("Backend error:", errorText);
-        throw new Error("Failed to update food");
+
+        const error = new Error("Failed to update food");
+        error.status = response.status;
+        throw error;
     }
     return await response.json();
 }
@@ -82,7 +87,9 @@ export async function deleteFood(id) {
         credentials: "include",
     });
     if (!response.ok) {
-        throw new Error("Failed to delete food");
+        const error = new Error("Failed to delete food");
+        error.status = response.status;
+        throw error;
     }
     return await response.text();
 }
