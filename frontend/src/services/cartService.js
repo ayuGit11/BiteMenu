@@ -10,7 +10,9 @@ export async function getCart() {
     });
 
     if (!response.ok) {
-        throw new Error("Failed to fetch cart");
+        const error = new Error("Failed to fetch cart");
+        error.status = response.status;
+        throw error;
     }
 
     return response.json();
@@ -26,7 +28,9 @@ export async function addToCart(foodId) {
     });
 
     if (!response.ok) {
-        throw new Error("Failed to add food to cart");
+        const error = new Error("Failed to add food to cart");
+        error.status = response.status;
+        throw error;
     }
 
     return response.json();
@@ -45,7 +49,9 @@ export async function updateCartQuantity(foodId, quantity) {
     );
 
     if (!response.ok) {
-        throw new Error("Failed to update cart");
+        const error = new Error("Failed to update cart");
+        error.status = response.status;
+        throw error;
     }
 
     return response.json();
@@ -61,7 +67,9 @@ export async function removeFromCart(foodId) {
     });
 
     if (!response.ok) {
-        throw new Error("Failed to remove food");
+        const error = new Error("Failed to remove food");
+        error.status = response.status;
+        throw error;
     }
 }
 
@@ -75,6 +83,8 @@ export async function clearCart() {
     });
 
     if (!response.ok) {
-        throw new Error("Failed to clear cart");
+        const error = new Error("Failed to clear cart");
+        error.status = response.status;
+        throw error;
     }
 }

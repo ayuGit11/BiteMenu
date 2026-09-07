@@ -4,11 +4,18 @@ import { useDispatch } from 'react-redux';
 import { AddItem } from '../redux/cartSlice';
 import { addToCart } from '../services/cartService';
 import { toast } from 'react-toastify';
+import { useAuth } from '../context/AuthContext';
 
 export default function Card({ foodName, foodImage, id, price, foodType }) {
     const dispatch = useDispatch();
+    const { user,logout } = useAuth();
     const handleAddToCart = async () => {
         try {
+             // User is not logged in
+            if (!user) {
+                toast.error("Please login to add items to cart");
+                return;
+            }
             // Save/update cart in backend
             const cartItem = await addToCart(id);
             // Update Redux for UI
@@ -25,8 +32,16 @@ export default function Card({ foodName, foodImage, id, price, foodType }) {
             toast.success(`${foodName} Added`);
         } catch (error) {
             console.error("Add to cart failed:", error);
-            toast.error("Please login to add items to cart");
-        }
+           if (error.status === 401) {
+                logout();
+                toast.error("Your session has expired. Please login again.");
+            } else if (error.status === 403) {
+                logout();
+                toast.error("Your session is no longer valid. Please login again.");
+            } else {
+                toast.error("Server is unavailable. Please try again.");
+            }
+        };
     };
 
     return (

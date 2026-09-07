@@ -31,7 +31,16 @@ export default function AuthProvider({ children }) {
                     dispatch(setCart(cart));
                 } catch (error) {
                     console.error("Failed to load cart:", error);
-                    dispatch(setCart([]));
+                   // dispatch(setCart([]));
+                   if (error.status === 401) {
+                        // Backend session is no longer valid
+                        sessionStorage.removeItem("username");
+                        sessionStorage.removeItem("auth");
+                        sessionStorage.removeItem("role");
+
+                        setUser(null);
+                        dispatch(ClearCart());
+                   }
                 }
             };
             loadCart();

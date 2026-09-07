@@ -7,24 +7,26 @@ import { useContext } from 'react'
 import { dataContext } from '../context/UserContext'
 import { ImCross } from "react-icons/im";
 import Card2 from '../Component/Card2'
-import { useSelector } from 'react-redux'
+import { useSelector,useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { ClearCart } from '../redux/cartSlice'
+import { clearCart } from "../services/cartService";
+
 
 function Home() {
+  const dispatch = useDispatch();
   let {categories,setCategory,food,input,showCart,setShowCart}=useContext(dataContext)
-  const { user } = useAuth();
-  const navigate = useNavigate();
+  
 
-  function handlePlaceOrder() {
-    if (!user) {
-      navigate("/login", {
-        state: { from: "/" }
-      });
-      return;
+  async function handlePlaceOrder() {
+    try{
+      await clearCart();
+      dispatch(ClearCart());
+      setShowCart(false);
+      toast.success("Woohoo🥳 Your Order is placed✅");
+    }catch(error){
+      toast.error("Failed to place order. Please try again.");
     }
-    toast.success("Order Placed...");
   }
   function filter(category){
     

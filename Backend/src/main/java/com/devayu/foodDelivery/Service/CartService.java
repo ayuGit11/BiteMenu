@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.devayu.foodDelivery.Model.CartItem;
 import com.devayu.foodDelivery.Model.CartItemResponse;
@@ -107,6 +108,7 @@ public class CartService {
     }
 
     // CLEAR ENTIRE CART
+    @Transactional 
     public void clearCart() {
         User user = getCurrentUser();
         cartItemRepository.deleteByUser(user);
