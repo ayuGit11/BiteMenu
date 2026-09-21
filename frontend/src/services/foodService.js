@@ -1,15 +1,15 @@
 const API_URL = "http://localhost:8080/foods";
 
 //GET stored Basic Auth credentials
-const getAuthHeaders = () => { 
-    const credentials = sessionStorage.getItem("auth"); 
-    if (!credentials) { 
-        return {}; 
-    } 
+const getAuthHeaders = () => {
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+        return {};
+    }
     return {
-         Authorization: `Basic ${credentials}`, 
+        Authorization: `Bearer ${token}`
     };
- };
+};
 
 // GET all food
 export async function getAllFoods() {
@@ -36,7 +36,6 @@ export async function addFood(food) {
     const response = await fetch(API_URL, {
         method: "POST",
         headers: { ...getAuthHeaders(), },
-        credentials: "include",
         body: formData
     });
     if (!response.ok) {
@@ -63,7 +62,6 @@ export async function updateFood(id, food) {
     const response = await fetch(`${API_URL}/${id}`, {
         method: "PUT",
         headers: { ...getAuthHeaders(), },
-        credentials: "include",
         body: formData
 
     });
@@ -84,7 +82,6 @@ export async function deleteFood(id) {
     const response = await fetch(`${API_URL}/${id}`, {
         method: "DELETE",
         headers: { ...getAuthHeaders(), },
-        credentials: "include",
     });
     if (!response.ok) {
         const error = new Error("Failed to delete food");

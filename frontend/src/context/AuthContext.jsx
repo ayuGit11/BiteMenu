@@ -9,13 +9,13 @@ export default function AuthProvider({ children }) {
     const dispatch = useDispatch();
     const [user, setUser] = useState(() => {
         const username = sessionStorage.getItem("username");
-        const auth = sessionStorage.getItem("auth");
+        const token = sessionStorage.getItem("token");
         const role = sessionStorage.getItem("role");
 
-        if (username && auth) {
+        if (username && token) {
             return {
                 username,
-                auth,
+                token,
                 role
             };
         }
@@ -35,7 +35,7 @@ export default function AuthProvider({ children }) {
                    if (error.status === 401) {
                         // Backend session is no longer valid
                         sessionStorage.removeItem("username");
-                        sessionStorage.removeItem("auth");
+                        sessionStorage.removeItem("token");
                         sessionStorage.removeItem("role");
 
                         setUser(null);
@@ -45,15 +45,12 @@ export default function AuthProvider({ children }) {
             };
             loadCart();
         }}, [user, dispatch]);
-    const login = async (username, password) => {
-        const credentials = btoa(`${username}:${password}`);
-        
+    const login = async (username, password) => {       
         const response = await fetch("http://localhost:8080/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            credentials: "include",
             body: JSON.stringify({
                 username,
                 password
@@ -65,23 +62,23 @@ export default function AuthProvider({ children }) {
 
         const data = await response.json();
 
-        sessionStorage.setItem("username", username);
-        sessionStorage.setItem("auth", credentials);
+        sessionStorage.setItem("username", data.username);
+        sessionStorage.setItem("token", data.token);
         sessionStorage.setItem("role", data.role);
 
         setUser({
-            username,
-            auth: credentials,
+            username: data.username,
+            token: data.token,
             role: data.role
         });
-       
+            
     };
 
     const logout = () => {
         // Clear cart when user logs out
         dispatch(ClearCart());
         sessionStorage.removeItem("username");
-        sessionStorage.removeItem("auth");
+        sessionStorage.removeItem("token");
         sessionStorage.removeItem("role");
 
         setUser(null);

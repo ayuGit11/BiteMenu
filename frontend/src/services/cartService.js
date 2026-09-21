@@ -1,12 +1,24 @@
 const API_URL = "http://localhost:8080/cart";
 
+const getAuthHeaders = () => {
+    const token = sessionStorage.getItem("token");
 
+    if (!token) {
+        return {};
+    }
+
+    return {
+        Authorization: `Bearer ${token}`
+    };
+};
 // GET CURRENT USER'S CART
 export async function getCart() {
 
     const response = await fetch(API_URL, {
         method: "GET",
-        credentials: "include"
+        headers: {
+            ...getAuthHeaders()
+        }
     });
 
     if (!response.ok) {
@@ -24,7 +36,9 @@ export async function addToCart(foodId) {
 
     const response = await fetch(`${API_URL}/${foodId}`, {
         method: "POST",
-        credentials: "include"
+        headers: {
+            ...getAuthHeaders()
+        }
     });
 
     if (!response.ok) {
@@ -44,7 +58,9 @@ export async function updateCartQuantity(foodId, quantity) {
         `${API_URL}/${foodId}?quantity=${quantity}`,
         {
             method: "PUT",
-            credentials: "include"
+            headers: {
+                ...getAuthHeaders()
+            }
         }
     );
 
@@ -63,7 +79,9 @@ export async function removeFromCart(foodId) {
 
     const response = await fetch(`${API_URL}/${foodId}`, {
         method: "DELETE",
-        credentials: "include"
+        headers: {
+            ...getAuthHeaders()
+        }
     });
 
     if (!response.ok) {
@@ -79,7 +97,9 @@ export async function clearCart() {
 
     const response = await fetch(API_URL, {
         method: "DELETE",
-        credentials: "include"
+        headers: {
+            ...getAuthHeaders()
+        }
     });
 
     if (!response.ok) {
