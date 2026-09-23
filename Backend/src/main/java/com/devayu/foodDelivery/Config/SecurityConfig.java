@@ -15,7 +15,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -33,11 +32,9 @@ public class SecurityConfig {
     @Autowired
     private JwtFilter jwtFilter;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12);
-    }
-
+    @Autowired
+    private OAuth2SuccessHandler oAuth2SuccessHandler;
+   
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration configuration) throws Exception {
@@ -45,27 +42,29 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authProvider() {
-
+    public AuthenticationProvider authProvider(PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailService);
-        provider.setPasswordEncoder(passwordEncoder());
-
+        provider.setPasswordEncoder(passwordEncoder);
         return provider;
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, OAuth2SuccessHandler oauth2SuccessHandler) throws Exception {
         // Default constructor
         http.csrf(customizer->customizer.disable())
             .cors(Customizer.withDefaults())
+            .oauth2Login(oauth2 -> oauth2.successHandler(oauth2SuccessHandler))
             .authorizeHttpRequests(request -> request
             // Public endpoints
             .requestMatchers(HttpMethod.GET, "/foods/**").permitAll()
             .requestMatchers("/register").permitAll()
             .requestMatchers("/images/**").permitAll()
             .requestMatchers("/login").permitAll()
+                        
+            // OAuth2
+            .requestMatchers("/oauth2/**").permitAll()
+            .requestMatchers("/login/oauth2/**").permitAll()
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
 
             // Admin only
             .requestMatchers(HttpMethod.POST, "/foods").hasRole("ADMIN")
@@ -84,7 +83,7 @@ public class SecurityConfig {
             .logoutUrl("/logout")
             .clearAuthentication(true)
             )
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
             .addFilterBefore(jwtFilter,UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

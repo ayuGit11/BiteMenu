@@ -16,6 +16,7 @@ export async function getCart() {
 
     const response = await fetch(API_URL, {
         method: "GET",
+        credentials: "include",
         headers: {
             ...getAuthHeaders()
         }
@@ -36,6 +37,7 @@ export async function addToCart(foodId) {
 
     const response = await fetch(`${API_URL}/${foodId}`, {
         method: "POST",
+        credentials: "include",
         headers: {
             ...getAuthHeaders()
         }
@@ -58,6 +60,7 @@ export async function updateCartQuantity(foodId, quantity) {
         `${API_URL}/${foodId}?quantity=${quantity}`,
         {
             method: "PUT",
+            credentials: "include",
             headers: {
                 ...getAuthHeaders()
             }
@@ -79,6 +82,7 @@ export async function removeFromCart(foodId) {
 
     const response = await fetch(`${API_URL}/${foodId}`, {
         method: "DELETE",
+        credentials: "include",
         headers: {
             ...getAuthHeaders()
         }
@@ -97,6 +101,7 @@ export async function clearCart() {
 
     const response = await fetch(API_URL, {
         method: "DELETE",
+        credentials: "include",
         headers: {
             ...getAuthHeaders()
         }

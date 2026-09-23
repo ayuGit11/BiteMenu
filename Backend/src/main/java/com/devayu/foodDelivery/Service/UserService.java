@@ -23,7 +23,6 @@ public class UserService {
         if (userRepo.existsByUsername(user.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole("USER");
 

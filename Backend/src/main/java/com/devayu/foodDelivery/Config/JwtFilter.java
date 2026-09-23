@@ -16,6 +16,7 @@ import com.devayu.foodDelivery.Service.MyUserDetailsService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -34,15 +35,23 @@ public class JwtFilter extends OncePerRequestFilter {
                 String authHeader = request.getHeader("Authorization");
                 String username = null;
                 String token = null;
-
+                
                 if(authHeader != null && authHeader.startsWith("Bearer ")) {
                     token = authHeader.substring(7);
+                }
+                else if (request.getCookies() != null) {
+                    for (Cookie cookie : request.getCookies()) {
+                        if ("BITEMENU_TOKEN".equals(cookie.getName())) {
+                            token = cookie.getValue();
+                            break;
+                        }
+                    }
+                }
+                if (token != null) {
                     try {
                         username = jwtService.extractedUsername(token);
                     } catch (Exception e) {
-                        // Invalid JWT
-                        filterChain.doFilter(request, response);
-                        return;
+                        System.out.println("Invalid JWT: " + e.getMessage());
                     }
                 }
 
@@ -56,6 +65,7 @@ public class JwtFilter extends OncePerRequestFilter {
                    }
                     } catch (Exception e) {
                         // Invalid/expired token
+                         System.out.println("JWT authentication failed: "+ e.getMessage() );
                     }
            }
             filterChain.doFilter(request, response);

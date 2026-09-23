@@ -11,6 +11,10 @@ public class UserPrincipal implements UserDetails {
 
     private User user;
 
+    public User getUser() {
+        return user;
+    }
+
     public UserPrincipal(User user) {
         this.user = user;
         System.out.println("UserPrincipal created for user: " + user.getUsername() + " with role: " + user.getRole());

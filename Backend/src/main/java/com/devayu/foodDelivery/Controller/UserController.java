@@ -70,4 +70,28 @@ public class UserController {
            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
     }
+    @GetMapping("/auth/me")
+    public ResponseEntity<?> getCurrentUser(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Not authenticated");
+        }
+        UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
+        User user = principal.getUser();
+        String role = authentication.getAuthorities()
+                .stream()
+                .findFirst()
+                .map(authority ->
+                        authority.getAuthority().replace("ROLE_", ""))
+                .orElse("");
+
+        return ResponseEntity.ok(Map.of(
+                "username", user.getUsername(),
+                "displayName",
+                    user.getDisplayName() != null
+                            ? user.getDisplayName()
+                            : user.getUsername(),
+                "role", role
+        ));
+    }
 }

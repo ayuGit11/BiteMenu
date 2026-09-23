@@ -9,6 +9,7 @@ export default function AuthProvider({ children }) {
     const dispatch = useDispatch();
     const [user, setUser] = useState(() => {
         const username = sessionStorage.getItem("username");
+        const displayname = sessionStorage.getItem("displayname");
         const token = sessionStorage.getItem("token");
         const role = sessionStorage.getItem("role");
 
@@ -22,6 +23,40 @@ export default function AuthProvider({ children }) {
 
         return null;
     });
+    useEffect(() => {
+        const restoreGoogleLogin = async () => {
+            // Normal login already restored from sessionStorage
+            const storedToken = sessionStorage.getItem("token");
+            if (storedToken) {
+                return;
+            }
+            try {
+                const response = await fetch(
+                    "http://localhost:8080/auth/me",
+                    {
+                        method: "GET",
+                        credentials: "include"
+                    }
+                );
+                if (!response.ok) {
+                    return;
+                }
+                const data = await response.json();
+                setUser({
+                    username: data.username,
+                    displayName:data.displayName,
+                    role: data.role,
+                    token: null
+                });
+            } catch (error) {
+                console.error(
+                    "Failed to restore authentication:",
+                    error
+                );
+            }
+        };
+        restoreGoogleLogin();
+    }, []);
     // Load cart whenever an already logged-in user is available
      useEffect(() => {
         if(user){
@@ -68,15 +103,25 @@ export default function AuthProvider({ children }) {
 
         setUser({
             username: data.username,
+            displayName:data.displayName,
             token: data.token,
             role: data.role
         });
             
     };
 
-    const logout = () => {
-        // Clear cart when user logs out
+    const logout = async () => {
+        try {
+            await fetch("http://localhost:8080/logout", {
+                method: "POST",
+                credentials: "include"
+            });
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }
+
         dispatch(ClearCart());
+
         sessionStorage.removeItem("username");
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("role");
