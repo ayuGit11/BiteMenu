@@ -46,23 +46,16 @@ public class JwtFilter extends OncePerRequestFilter {
             FilterChain filterChain)
             throws ServletException, IOException {
 
-        String authHeader =
-                request.getHeader("Authorization");
+        String authHeader = request.getHeader("Authorization");
 
         String username = null;
         String token = null;
 
-        if (authHeader != null &&
-                authHeader.startsWith("Bearer ")) {
-
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
-
         } else if (request.getCookies() != null) {
-
             for (Cookie cookie : request.getCookies()) {
-
                 if ("BITEMENU_TOKEN".equals(cookie.getName())) {
-
                     token = cookie.getValue();
                     break;
                 }
@@ -70,58 +63,37 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         if (token != null) {
-
             try {
-                username =
-                        jwtService.extractedUsername(token);
+                username = jwtService.extractedUsername(token);
 
             } catch (Exception e) {
-
-                System.out.println(
-                        "Invalid JWT: " + e.getMessage()
-                );
+                System.out.println("Invalid JWT: " + e.getMessage());
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
             }
         }
 
-        if (username != null &&
-                SecurityContextHolder
-                        .getContext()
-                        .getAuthentication() == null) {
-
-            UserDetails userDetails =
-                    context
-                        .getBean(MyUserDetailsService.class)
-                        .loadUserByUsername(username);
-
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = context.getBean(MyUserDetailsService.class).loadUserByUsername(username);
             try {
-
-                if (jwtService.validateToken(
-                        token,
-                        userDetails)) {
-
+                if (jwtService.validateToken(token,userDetails)) {
                     UsernamePasswordAuthenticationToken authToken =
                             new UsernamePasswordAuthenticationToken(
                                     userDetails,
                                     null,
                                     userDetails.getAuthorities()
                             );
-
                     authToken.setDetails(
                             new WebAuthenticationDetailsSource()
                                     .buildDetails(request)
                     );
-
-                    SecurityContextHolder
-                            .getContext()
-                            .setAuthentication(authToken);
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }else {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    return;
                 }
-
             } catch (Exception e) {
-
-                System.out.println(
-                        "JWT authentication failed: "
-                                + e.getMessage()
-                );
+                System.out.println("JWT authentication failed: "+ e.getMessage());
             }
         }
 
