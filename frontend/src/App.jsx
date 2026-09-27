@@ -4,6 +4,8 @@ import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import ManageFoodMenu from "./Pages/ManageFoodMenu";
+import GoogleCallback from "./Pages/GoogleCallback";
+import ChooseUsername from "./Pages/ChooseUsername";
 
 import { useAuth } from "./context/AuthContext";
 
@@ -24,6 +26,8 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/google-callback" element={<GoogleCallback />}/>
+            <Route path="/choose-username"element={<ChooseUsername />}/>
             <Route path="/menu"
                 element={
                     <AdminRoute>

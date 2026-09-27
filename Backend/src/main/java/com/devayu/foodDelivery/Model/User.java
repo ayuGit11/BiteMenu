@@ -15,11 +15,16 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String username;
+    @Column(unique = true, nullable = false)
+    private String email;
     private String password;
+    @Column(nullable = false)
     private String role;
-
+    @Column(name = "display_name")
     private String displayName;
+    @Column(name = "google_id", unique = true)
+    private String googleId;
     
 }

@@ -9,6 +9,11 @@ import com.devayu.foodDelivery.Model.User;
 
 public interface UserRepo extends JpaRepository<User, Integer> {
     // Define custom query methods if needed
-    Optional<User> findByUsername(String username);
     boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
+    boolean existsByGoogleId(String googleId);
+    Optional<User> findByUsername(String username);
+    Optional<User> findByEmail(String email);
+    Optional<User> findByGoogleId(String googleId);
+    Optional<User> findByUsernameIgnoreCaseOrEmailIgnoreCase(String username, String email);
 }

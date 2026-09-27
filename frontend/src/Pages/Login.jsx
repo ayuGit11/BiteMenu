@@ -3,7 +3,7 @@ import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function Login() {
-  const [username, setUsername] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [loginSuccess, setLoginSuccess] = useState(false);
@@ -18,7 +18,7 @@ function Login() {
     setLoginSuccess(false);
 
     try {
-      await login(username, password);
+      await login(identifier, password);
         setMessage("Login successful!");
         setLoginSuccess(true);
         setTimeout(() => {
@@ -29,7 +29,7 @@ function Login() {
         }, 500);
     }catch(error){
         console.error("Login error:", error);
-        setMessage(error.message || "Invalid username or password");
+        setMessage(error.message || "Invalid username/email or password");
         setLoginSuccess(false);
     }
   };
@@ -49,9 +49,9 @@ function Login() {
 
         <input
           type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => {setUsername(e.target.value);setMessage("");}}
+          placeholder="Username Or Email"
+          value={identifier}
+          onChange={(e) => {setIdentifier(e.target.value);setMessage("");}}
           className={`w-full border p-3 mb-4 rounded-md outline-none focus:ring-2 focus:ring-orange-400 ${
             message && !loginSuccess
               ? "border-red-500"

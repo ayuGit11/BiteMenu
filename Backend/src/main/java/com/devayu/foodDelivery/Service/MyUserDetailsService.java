@@ -1,7 +1,5 @@
 package com.devayu.foodDelivery.Service;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,11 +17,16 @@ public class MyUserDetailsService implements UserDetailsService {
     private UserRepo userRepo;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> userOptional = userRepo.findByUsername(username);
-        if(userOptional.isEmpty()) {
-            throw new UsernameNotFoundException("User not found with username: " + username);
-        }
-        return new UserPrincipal(userOptional.get());
+    public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
+        if (identifier == null || identifier.isBlank()) {
+            throw new UsernameNotFoundException(
+                    "Invalid username or password");
+         }
+       String value = identifier.trim();
+       User user = userRepo.findByUsernameIgnoreCaseOrEmailIgnoreCase(value, value)
+            .orElseThrow(() ->
+                    new UsernameNotFoundException(
+                            "Invalid username or password"));
+        return new UserPrincipal(user);
     }
 }

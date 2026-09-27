@@ -65,6 +65,9 @@ public class SecurityConfig {
             .requestMatchers("/oauth2/**").permitAll()
             .requestMatchers("/login/oauth2/**").permitAll()
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            
+            // Google onboarding
+            .requestMatchers("/auth/google/**").authenticated()
 
             // Admin only
             .requestMatchers(HttpMethod.POST, "/foods").hasRole("ADMIN")

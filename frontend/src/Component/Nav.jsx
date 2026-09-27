@@ -50,7 +50,7 @@ return (
 
           {user ? (
             <div className='flex items-center gap-3'>
-              <span className='font-bold'> Hi, {user.displayName} </span>
+              <span className='font-bold'> Hi, {user.username} </span>
               <button onClick={logout} className='bg-amber-900 text-white px-4 py-2 rounded-md font-semibold hover:bg-amber-700'>
                 Logout
               </button>
