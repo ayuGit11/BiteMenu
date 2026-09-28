@@ -1,0 +1,14 @@
+# Environment variables
+.env
+.env.*
+
+# But allow example env file
+!.env.example
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db/
