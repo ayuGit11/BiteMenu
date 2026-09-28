@@ -1,0 +1,74 @@
+services:
+
+  db:
+    image: postgres:${POSTGRES_VERSION}-alpine
+    container_name: bitemenu-db
+
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - bitemenu-db-data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+
+  backend:
+    image: bitemenu-backend:${BITEMENU_VERSION}
+    build:
+      context: ./Backend
+
+    container_name: bitemenu-backend
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB}
+      DB_USERNAME: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+
+      SPRING_PROFILES_ACTIVE: docker
+      FRONTEND_URL: ${FRONTEND_URL}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+
+    volumes:
+      - ./Backend/uploads/images:/app/uploads/images
+
+
+  frontend:
+    image: bitemenu-frontend:${BITEMENU_VERSION}
+    build:
+      context: ./Frontend
+
+    container_name: bitemenu-frontend
+
+    depends_on:
+      - backend
+
+    ports:
+      - "5173:80"
+
+
+volumes:
+  bitemenu-db-data:
